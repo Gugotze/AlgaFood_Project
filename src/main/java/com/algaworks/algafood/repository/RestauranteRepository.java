@@ -15,6 +15,8 @@ public interface RestauranteRepository {
 
     Restaurante salvar(Restaurante restaurante);
 
+    Restaurante atualizar(Restaurante restaurante);
+
     void remover(Restaurante restaurante);
 
 }

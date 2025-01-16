@@ -33,6 +33,11 @@ public class RestauranteRepositoryImpl implements RestauranteRepository {
     }
 
     @Override
+    public Restaurante atualizar(Restaurante restaurante) {
+        return manager.merge(restaurante);
+    }
+
+    @Override
     @Transactional
     public void remover(Restaurante restaurante) {
         restaurante = buscar(restaurante.getId());

@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-
+// @JsonRootName("cozinha") Essa annotation você muda o nome do objeto (Visivel somente na visão XML)
 public class Cozinha {
 
     @Id

@@ -3,13 +3,11 @@ package com.algaworks.algafood.controller;
 import com.algaworks.algafood.domain.Cozinha;
 import com.algaworks.algafood.domain.EntidadeEmUsoException;
 import com.algaworks.algafood.domain.EntidadeNaoEncontradaException;
-import com.algaworks.algafood.model.CozinhasXmlWrapper;
 import com.algaworks.algafood.repository.CozinhaRepository;
 import com.algaworks.algafood.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

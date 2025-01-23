@@ -4,7 +4,6 @@ import com.algaworks.algafood.domain.Cozinha;
 import com.algaworks.algafood.domain.Restaurante;
 import com.algaworks.algafood.repository.CozinhaRepository;
 import com.algaworks.algafood.repository.RestauranteRepository;
-import com.algaworks.algafood.service.spec.RestauranteSpecs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,5 +85,16 @@ public class TesteController {
         return restauranteRepository.findComFreteGratis(nome);
     }
 
+    @GetMapping("/restaurantes/primeiro")
+    public Optional<Restaurante> restaurantePrimeiro() {
+
+        return restauranteRepository.buscarPrimeiro();
+    }
+
+    @GetMapping("/cozinhas/primeiro")
+    public Optional<Cozinha> cozinhaPrimeiro() {
+
+        return cozinhaRepository.buscarPrimeiro();
+    }
 
 }

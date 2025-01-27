@@ -1,8 +1,8 @@
 package com.algaworks.algafood.controller;
 
 import com.algaworks.algafood.domain.Cidade;
-import com.algaworks.algafood.domain.EntidadeEmUsoException;
-import com.algaworks.algafood.domain.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.exception.EntidadeEmUsoException;
+import com.algaworks.algafood.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.repository.CidadeRepository;
 import com.algaworks.algafood.service.CadastroCidadeService;
 import org.springframework.beans.BeanUtils;

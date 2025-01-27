@@ -1,8 +1,8 @@
 package com.algaworks.algafood.service;
 
 import com.algaworks.algafood.domain.Cozinha;
-import com.algaworks.algafood.domain.EntidadeEmUsoException;
-import com.algaworks.algafood.domain.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.exception.EntidadeEmUsoException;
+import com.algaworks.algafood.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.repository.CozinhaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;

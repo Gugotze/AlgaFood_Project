@@ -1,6 +1,6 @@
 package com.algaworks.algafood.controller;
 
-import com.algaworks.algafood.domain.EntidadeNaoEncontradaException;
+import com.algaworks.algafood.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.Restaurante;
 import com.algaworks.algafood.repository.RestauranteRepository;
 import com.algaworks.algafood.service.CadastroRestauranteService;
@@ -60,7 +60,7 @@ public class RestauranteController {
             Optional<Restaurante> restauranteAtual = restauranteRepository.findById(restauranteId);
 
             if (restauranteAtual.isPresent()) {
-                BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
+                BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento", "endereco", "dataCadastro");
 
                Restaurante restauranteNovo = cadastroRestaurante.salvar(restauranteAtual.get());
                 return ResponseEntity.ok(restauranteNovo);

@@ -49,4 +49,8 @@ public class Restaurante {
             joinColumns = @JoinColumn(name = "restaurante_id"),// Defini a coluna que faz referencia a tabela atual
             inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
     private List<FormaPagamento> formasPagamento = new ArrayList<>();
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "restaurante")
+    private List<Produto> produtos = new ArrayList<>();
 }

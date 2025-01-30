@@ -25,7 +25,7 @@ public class Restaurante {
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne//(fetch = FetchType.LAZY)
     // @JsonIgnore
     // @JsonIgnoreProperties(value = "hibernateLazyInitializer")
     @JoinColumn(name = "cozinha_id", nullable = false)
@@ -46,8 +46,8 @@ public class Restaurante {
     @JsonIgnore
     private LocalDateTime dataAtualizacao;
 
-    @ManyToMany
-    @JsonIgnore
+    @ManyToMany//(fetch = FetchType.EAGER)
+   // @JsonIgnore
     @JoinTable(name = "restaurante_forma_pagamento",
             joinColumns = @JoinColumn(name = "restaurante_id"),// Defini a coluna que faz referencia a tabela atual
             inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))

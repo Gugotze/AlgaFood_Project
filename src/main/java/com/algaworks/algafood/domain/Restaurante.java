@@ -25,8 +25,11 @@ public class Restaurante {
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
-    @ManyToOne
-  //@JoinColumn(name = "cozinha_codigo") aqui voce pode colocar um nome padrao para a FK
+    @ManyToOne(fetch = FetchType.LAZY)
+    // @JsonIgnore
+    // @JsonIgnoreProperties(value = "hibernateLazyInitializer")
+    @JoinColumn(name = "cozinha_id", nullable = false)
+    //@JoinColumn(name = "cozinha_codigo") aqui voce pode colocar um nome padrao para a FK
     private Cozinha cozinha;
 
     @Embedded

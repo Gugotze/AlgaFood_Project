@@ -1,4 +1,4 @@
 CREATE TABLE cozinha (
-    id BIGSERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,
     nome VARCHAR(60) NOT NULL
 );

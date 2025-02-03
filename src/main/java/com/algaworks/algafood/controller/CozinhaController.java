@@ -1,8 +1,6 @@
 package com.algaworks.algafood.controller;
 
 import com.algaworks.algafood.domain.Cozinha;
-import com.algaworks.algafood.exception.EntidadeEmUsoException;
-import com.algaworks.algafood.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.repository.CozinhaRepository;
 import com.algaworks.algafood.service.CadastroCozinhaService;
 import org.springframework.beans.BeanUtils;
@@ -42,6 +40,7 @@ public class CozinhaController {
     public Cozinha adicionar(@RequestBody Cozinha cozinha) {
         return cadastroCozinhaService.salvar(cozinha);
     }
+
     @PutMapping("/{cozinhaId}")
     public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId,
                                              @RequestBody Cozinha cozinha) {
@@ -57,18 +56,24 @@ public class CozinhaController {
         return ResponseEntity.notFound().build();
     }
 
+    //  @DeleteMapping("/{cozinhaId}")
+    //  public ResponseEntity<Cozinha> remover(@PathVariable Long cozinhaId) {
+    //      try {
+    //          cadastroCozinhaService.excluir(cozinhaId);
+    //          return ResponseEntity.noContent().build();
+
+    //    //  } catch (EntidadeNaoEncontradaException e) {
+    //     //     return ResponseEntity.notFound().build();
+
+    //      } catch (EntidadeEmUsoException e) {
+    //          return ResponseEntity.status(HttpStatus.CONFLICT).build();
+    //      }
+    //  }
+
     @DeleteMapping("/{cozinhaId}")
-    public ResponseEntity<Cozinha> remover(@PathVariable Long cozinhaId) {
-        try {
-            cadastroCozinhaService.excluir(cozinhaId);
-            return ResponseEntity.noContent().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Long cozinhaId) {
 
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.notFound().build();
-
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
+        cadastroCozinhaService.excluir(cozinhaId);
     }
-
 }

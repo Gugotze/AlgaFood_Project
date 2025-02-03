@@ -1,18 +1,14 @@
 package com.algaworks.algafood.controller;
 
 import com.algaworks.algafood.domain.Cidade;
-import com.algaworks.algafood.exception.EntidadeEmUsoException;
-import com.algaworks.algafood.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.repository.CidadeRepository;
 import com.algaworks.algafood.service.CadastroCidadeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/cidades")
@@ -30,61 +26,33 @@ public class CidadeController {
     }
 
     @GetMapping("/{cidadeId}")
-    public ResponseEntity<Cidade> buscar(@PathVariable Long cidadeId) {
-        Optional<Cidade> cidade = cidadeRepository.findById(cidadeId);
+    public Cidade buscar(@PathVariable Long cidadeId) {
 
-        return cidade.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return cadastroCidade.buscarOuFalhar(cidadeId);
+
     }
 
     @PostMapping
-    public ResponseEntity<?> adicionar(@RequestBody Cidade cidade) {
-        try {
-            cidade = cadastroCidade.salvar(cidade);
+    public Cidade adicionar(@RequestBody Cidade cidade) {
 
-            return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(cidade);
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest()
-                    .body(e.getMessage());
-        }
+        return cadastroCidade.salvar(cidade);
     }
 
     @PutMapping("/{cidadeId}")
-    public ResponseEntity<?> atualizar(@PathVariable Long cidadeId,
-                                       @RequestBody Cidade cidade) {
-        try {
-            // Podemos usar o orElse(null) também, que retorna a instância de cidade
-            // dentro do Optional, ou null, caso ele esteja vazio,
-            // mas nesse caso, temos a responsabilidade de tomar cuidado com NullPointerException
-            Cidade cidadeAtual = cidadeRepository.findById(cidadeId).orElse(null);
+    public Cidade atualizar(@PathVariable Long cidadeId,
+                            @RequestBody Cidade cidade) {
+        Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
 
-            if (cidadeAtual != null) {
-                BeanUtils.copyProperties(cidade, cidadeAtual, "id");
+        BeanUtils.copyProperties(cidade, cidadeAtual, "id");
 
-                cidadeAtual = cadastroCidade.salvar(cidadeAtual);
-                return ResponseEntity.ok(cidadeAtual);
-            }
-
-            return ResponseEntity.notFound().build();
-
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.badRequest()
-                    .body(e.getMessage());
-        }
+        return cadastroCidade.salvar(cidadeAtual);
     }
 
     @DeleteMapping("/{cidadeId}")
-    public ResponseEntity<Cidade> remover(@PathVariable Long cidadeId) {
-        try {
-            cadastroCidade.excluir(cidadeId);
-            return ResponseEntity.noContent().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remover(@PathVariable Long cidadeId) {
 
-        } catch (EntidadeNaoEncontradaException e) {
-            return ResponseEntity.notFound().build();
+        cadastroCidade.excluir(cidadeId);
 
-        } catch (EntidadeEmUsoException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
-        }
     }
-
 }

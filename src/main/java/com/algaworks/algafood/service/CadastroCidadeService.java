@@ -16,19 +16,19 @@ public class CadastroCidadeService {
 
     public static final String NÃO_EXISTE_UM_CADASTRO_DE_CIDADE_COM_CÓDIGO_D = "Não existe um cadastro de cidade com código %d";
     public static final String CIDADE_DE_CÓDIGO_D_NÃO_PODE_SER_REMOVIDA_POIS_ESTÁ_EM_USO = "Cidade de código %d não pode ser removida, pois está em uso";
+
     @Autowired
     private CidadeRepository cidadeRepository;
 
     @Autowired
     private EstadoRepository estadoRepository;
 
+    @Autowired
+    private CadastroEstadoService cadastroEstado;
+
     public Cidade salvar(Cidade cidade) {
         Long estadoId = cidade.getEstado().getId();
-
-        Estado estado = estadoRepository.findById(estadoId)
-                .orElseThrow(() -> new EntidadeNaoEncontradaException(
-                        String.format("Não existe cadastro de estado com código %d", estadoId)));
-
+        Estado estado = cadastroEstado.buscarOuFalhar(estadoId);
         cidade.setEstado(estado);
 
         return cidadeRepository.save(cidade);

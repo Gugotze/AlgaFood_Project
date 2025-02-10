@@ -10,45 +10,69 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
-
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntidadeNaoEncontradaException.class)
-    public ResponseEntity<?> tratarEstadoNaoEncontradoException(EntidadeNaoEncontradaException e, WebRequest request) {
+    public ResponseEntity<?> handleEstadoNaoEncontradoException(EntidadeNaoEncontradaException e, WebRequest request) {
 
-        return handleExceptionInternal(e, e.getMessage(), null, HttpStatus.NOT_FOUND, request);
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        String detail = e.getMessage();
+
+        Problem problem = createProblemBuilder(status, ProblemType.ENTIDADE_NAO_ENCONTRADA, detail);
+
+        return handleExceptionInternal(e, problem, null, status, request);
     }
 
     @ExceptionHandler(NegocioException.class)
-    public ResponseEntity<?> tratarNegocioException(NegocioException e, WebRequest request) {
+    public ResponseEntity<?> handleNegocioException(NegocioException e, WebRequest request) {
 
-        return handleExceptionInternal(e, e.getMessage(), null, HttpStatus.BAD_REQUEST, request);
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String detail = e.getMessage();
+
+        Problem problem = createProblemBuilder(status, ProblemType.ERRO_NEGOCIO, detail);
+
+        return handleExceptionInternal(e, problem, null, status, request);
+
     }
 
     @ExceptionHandler(EntidadeEmUsoException.class)
-    public ResponseEntity<?> tratarEntidadeEmUsoException(EntidadeEmUsoException e, WebRequest request) {
+    public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoException e, WebRequest request) {
 
-        return handleExceptionInternal(e, e.getMessage(), null, HttpStatus.CONFLICT, request);
+        HttpStatus status = HttpStatus.CONFLICT;
+        String detail = e.getMessage();
+
+        Problem problem = createProblemBuilder(status, ProblemType.ENTIDADE_EM_USO, detail);
+
+        return handleExceptionInternal(e, problem, null, status, request);
+
 
     }
 
 
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body, org.springframework.http.HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-        if (body==null){
-            body = Problema.builder()
-                    .dataHora(LocalDateTime.now())
-                    .mensagem(status.getReasonPhrase())
+        if (body == null) {
+            body = Problem.builder()
+                    .title(status.getReasonPhrase())
+                    .status(status.value())
                     .build();
-        } else if (body instanceof String){
-            body = Problema.builder()
-                    .dataHora(LocalDateTime.now())
-                    .mensagem((String) body)
+        } else if (body instanceof String) {
+            body = Problem.builder()
+                    .title((String) body)
+                    .status(status.value())
                     .build();
         }
         return super.handleExceptionInternal(ex, body, headers, status, request);
+    }
+
+    private Problem createProblemBuilder(HttpStatus status, ProblemType problemType, String detail) {
+        return Problem.builder()
+                .status(status.value())
+                .type(problemType.getUri())
+                .title(problemType.getTitle())
+                .detail(detail)
+                .build();
     }
 
 }

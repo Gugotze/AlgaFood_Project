@@ -1,8 +1,10 @@
 package com.algaworks.algafood.controller;
 
 import com.algaworks.algafood.domain.Restaurante;
+import com.algaworks.algafood.exception.CozinhaNaoEncontradoException;
 import com.algaworks.algafood.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.exception.NegocioException;
+import com.algaworks.algafood.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.repository.RestauranteRepository;
 import com.algaworks.algafood.service.CadastroRestauranteService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,7 +57,7 @@ public class RestauranteController {
 
         try {
             return cadastroRestaurante.salvar(restaurante);
-        } catch (EntidadeNaoEncontradaException e) {
+        } catch (RestauranteNaoEncontradoException e) {
             throw new NegocioException(e.getMessage());
         }
 
@@ -87,14 +89,14 @@ public class RestauranteController {
     @PutMapping("/{restauranteId}")
     public Restaurante atualizar(@PathVariable Long restauranteId,
                                  @RequestBody Restaurante restaurante) {
-        Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
-
-        BeanUtils.copyProperties(restaurante, restauranteAtual,
-                "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
-
         try {
+            Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
+
+            BeanUtils.copyProperties(restaurante, restauranteAtual,
+                    "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
+
             return cadastroRestaurante.salvar(restauranteAtual);
-        } catch (EntidadeNaoEncontradaException e) {
+        } catch (CozinhaNaoEncontradoException e) {
             throw new NegocioException(e.getMessage());
         }
     }

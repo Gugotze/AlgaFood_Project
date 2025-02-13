@@ -1,11 +1,11 @@
 package com.algaworks.algafood.exceptionHandler;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.algaworks.algafood.exception.EntidadeEmUsoException;
 import com.algaworks.algafood.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.exception.NegocioException;
+import com.fasterxml.jackson.databind.JsonMappingException.Reference;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-
-import com.fasterxml.jackson.databind.JsonMappingException.Reference;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
-import com.fasterxml.jackson.databind.exc.PropertyBindingException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
@@ -144,5 +142,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .map(ref -> ref.getFieldName())
                 .collect(Collectors.joining("."));
     }
+
 
 }

@@ -3,14 +3,13 @@ package com.algaworks.algafood.controller;
 import com.algaworks.algafood.domain.Restaurante;
 import com.algaworks.algafood.exception.CozinhaNaoEncontradoException;
 import com.algaworks.algafood.exception.NegocioException;
-import com.algaworks.algafood.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.repository.RestauranteRepository;
 import com.algaworks.algafood.service.CadastroRestauranteService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.flywaydb.core.internal.util.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -59,13 +58,11 @@ public class RestauranteController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Restaurante adicionar(@RequestBody @Valid Restaurante restaurante) {
-
         try {
             return cadastroRestaurante.salvar(restaurante);
-        } catch (RestauranteNaoEncontradoException e) {
+        } catch (CozinhaNaoEncontradoException e) {
             throw new NegocioException(e.getMessage());
         }
-
     }
 
 //	@PutMapping("/{restauranteId}")

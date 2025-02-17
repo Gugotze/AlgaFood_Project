@@ -2,6 +2,7 @@ package com.algaworks.algafood.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -35,6 +36,8 @@ public class Restaurante {
     // @JsonIgnore
     // @JsonIgnoreProperties(value = "hibernateLazyInitializer")
     @JoinColumn(name = "cozinha_id", nullable = false)
+    @NotNull
+    @Valid
     //@JoinColumn(name = "cozinha_codigo") aqui voce pode colocar um nome padrao para a FK
     private Cozinha cozinha;
 

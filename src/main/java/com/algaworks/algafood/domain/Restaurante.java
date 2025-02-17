@@ -2,7 +2,7 @@ package com.algaworks.algafood.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -21,9 +21,13 @@ public class Restaurante {
     private Long id;
 
     @NotNull
+    @NotEmpty
+    @NotBlank
     @Column(nullable = false)
     private String nome;
 
+    @DecimalMin("0")
+    @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 

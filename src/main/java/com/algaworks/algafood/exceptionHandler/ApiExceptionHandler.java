@@ -49,7 +49,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-                                                                  HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+                                                                  HttpHeaders headers, HttpStatus status, WebRequest request) {
         return handleValidationInternal(ex, ex.getBindingResult(), headers, status, request);
     }
 

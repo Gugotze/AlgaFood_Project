@@ -1,9 +1,11 @@
 package com.algaworks.algafood.domain;
 
+import com.algaworks.algafood.domain.groups.Groups;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
+import jakarta.validation.groups.Default;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -23,12 +25,12 @@ public class Restaurante {
 
     @NotNull
     @NotEmpty
-    @NotBlank
+    @NotBlank(groups = Default.class)
     @Column(nullable = false)
     private String nome;
 
     @DecimalMin("0")
-    @PositiveOrZero
+    @PositiveOrZero(groups = Groups.CadastroRestaurante.class)
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
@@ -36,7 +38,7 @@ public class Restaurante {
     // @JsonIgnore
     // @JsonIgnoreProperties(value = "hibernateLazyInitializer")
     @JoinColumn(name = "cozinha_id", nullable = false)
-    @NotNull
+    @NotNull(groups = Groups.CadastroRestaurante.class)
     @Valid
     //@JoinColumn(name = "cozinha_codigo") aqui voce pode colocar um nome padrao para a FK
     private Cozinha cozinha;

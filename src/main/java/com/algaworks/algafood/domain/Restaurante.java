@@ -24,25 +24,19 @@ public class Restaurante {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @NotEmpty
-    @NotBlank(message = "Nome é obrigatório")
+    @NotBlank
     @Column(nullable = false)
     private String nome;
 
-    @DecimalMin("0")
     @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
-    @ManyToOne//(fetch = FetchType.LAZY)
-    // @JsonIgnore
-    // @JsonIgnoreProperties(value = "hibernateLazyInitializer")
+    @ManyToOne
     @JoinColumn(name = "cozinha_id", nullable = false)
     @NotNull
     @Valid
     @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
-    //@JoinColumn(name = "cozinha_codigo") aqui voce pode colocar um nome padrao para a FK
     private Cozinha cozinha;
 
     @Embedded

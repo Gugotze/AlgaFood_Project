@@ -5,6 +5,7 @@ import com.algaworks.algafood.exception.EstadoNaoEncontradoException;
 import com.algaworks.algafood.exception.NegocioException;
 import com.algaworks.algafood.repository.CidadeRepository;
 import com.algaworks.algafood.service.CadastroCidadeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class CidadeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cidade adicionar(@RequestBody Cidade cidade) {
+    public Cidade adicionar(@RequestBody @Valid Cidade cidade) {
 
         try {
             return cadastroCidade.salvar(cidade);
@@ -47,7 +48,7 @@ public class CidadeController {
 
     @PutMapping("/{cidadeId}")
     public Cidade atualizar(@PathVariable Long cidadeId,
-                            @RequestBody Cidade cidade) {
+                            @RequestBody @Valid Cidade cidade) {
         Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
 
         BeanUtils.copyProperties(cidade, cidadeAtual, "id");

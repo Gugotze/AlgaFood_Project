@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,33 +41,39 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private MessageSource messageSource;
 
 
-        protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatusCode status, WebRequest request) {
 
-            ProblemType problemType = ProblemType.DADOS_INVALIDOS;
-            String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
+        ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+        String detail = "Um ou mais campos estão inválidos. Faça o preenchimento correto e tente novamente.";
 
-            BindingResult bindingResult = ex.getBindingResult();
+        BindingResult bindingResult = ex.getBindingResult();
 
-            List<Problem.Field> problemFields = bindingResult.getFieldErrors().stream()
-                    .map(fieldError -> {
-                        String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+        List<Problem.Object> problemObjects = bindingResult.getAllErrors().stream()
+                .map(objectError -> {
+                    String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
 
-                        return Problem.Field.builder()
-                                .name(fieldError.getField())
-                                .userMessage(message)
-                                .build();
-                    })
-                    .collect(Collectors.toList());
+                    String name = objectError.getObjectName();
 
-            Problem problem = createProblemBuilder(status, problemType, detail)
-                    .userMessage(detail)
-                    .fields(problemFields)
-                    .build();
+                    if (objectError instanceof FieldError) {
+                        name = ((FieldError) objectError).getField();
+                    }
 
-            return handleExceptionInternal(ex, problem, headers, status, request);
+                    return Problem.Object.builder()
+                            .name(name)
+                            .userMessage(message)
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        Problem problem = createProblemBuilder(status, problemType, detail)
+                .userMessage(detail)
+                .objects(problemObjects)
+                .build();
+
+        return handleExceptionInternal(ex, problem, headers, status, request);
     }
-
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUncaught(Exception ex, WebRequest request) {

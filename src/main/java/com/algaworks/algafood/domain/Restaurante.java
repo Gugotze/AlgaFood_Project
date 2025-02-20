@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
+import jakarta.validation.groups.ConvertGroup;
 import jakarta.validation.groups.Default;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -30,7 +31,7 @@ public class Restaurante {
     private String nome;
 
     @DecimalMin("0")
-    @PositiveOrZero(groups = Groups.CadastroRestaurante.class)
+    @PositiveOrZero
     @Column(name = "taxa_frete", nullable = false)
     private BigDecimal taxaFrete;
 
@@ -38,8 +39,9 @@ public class Restaurante {
     // @JsonIgnore
     // @JsonIgnoreProperties(value = "hibernateLazyInitializer")
     @JoinColumn(name = "cozinha_id", nullable = false)
-    @NotNull(groups = Groups.CadastroRestaurante.class)
+    @NotNull
     @Valid
+    @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
     //@JoinColumn(name = "cozinha_codigo") aqui voce pode colocar um nome padrao para a FK
     private Cozinha cozinha;
 

@@ -26,7 +26,7 @@ public class Restaurante {
 
     @NotNull
     @NotEmpty
-    @NotBlank(groups = Default.class)
+    @NotBlank(message = "Nome é obrigatório")
     @Column(nullable = false)
     private String nome;
 

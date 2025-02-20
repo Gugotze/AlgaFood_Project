@@ -1,14 +1,15 @@
 package com.algaworks.algafood.controller;
 
+import com.algaworks.algafood.core.validation.ValidacaoException;
 import com.algaworks.algafood.domain.Restaurante;
 import com.algaworks.algafood.exception.CozinhaNaoEncontradoException;
 import com.algaworks.algafood.exception.NegocioException;
-import com.algaworks.algafood.exception.RestauranteNaoEncontradoException;
 import com.algaworks.algafood.repository.RestauranteRepository;
 import com.algaworks.algafood.service.CadastroRestauranteService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.BeanPropertyBindingResult;
+import org.springframework.validation.SmartValidator;
 import org.springframework.web.bind.annotation.*;
 
 import java.lang.reflect.Field;
@@ -31,6 +34,9 @@ public class RestauranteController {
 
     @Autowired
     private CadastroRestauranteService cadastroRestaurante;
+
+    @Autowired
+    private SmartValidator validator;
 
     @GetMapping
     public List<Restaurante> listar() {
@@ -57,14 +63,12 @@ public class RestauranteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Restaurante adicionar(@RequestBody Restaurante restaurante) {
-
+    public Restaurante adicionar(@RequestBody @Valid Restaurante restaurante) {
         try {
             return cadastroRestaurante.salvar(restaurante);
-        } catch (RestauranteNaoEncontradoException e) {
+        } catch (CozinhaNaoEncontradoException e) {
             throw new NegocioException(e.getMessage());
         }
-
     }
 
 //	@PutMapping("/{restauranteId}")
@@ -92,7 +96,7 @@ public class RestauranteController {
 
     @PutMapping("/{restauranteId}")
     public Restaurante atualizar(@PathVariable Long restauranteId,
-                                 @RequestBody Restaurante restaurante) {
+                                 @RequestBody @Valid Restaurante restaurante) {
         try {
             Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
@@ -111,8 +115,18 @@ public class RestauranteController {
         Restaurante restauranteAtual = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
         merge(campos, restauranteAtual, request);
+        validate(restauranteAtual, "restaurante");
 
         return atualizar(restauranteId, restauranteAtual);
+    }
+
+    private void validate(Restaurante restaurante, String objectName) {
+        BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(restaurante, objectName);
+        validator.validate(restaurante, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            throw new ValidacaoException(bindingResult);
+        }
     }
 
 

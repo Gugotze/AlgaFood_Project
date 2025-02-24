@@ -4,11 +4,20 @@ TRUNCATE cidade, cozinha, estado, forma_pagamento, grupo, grupo_permissao, permi
          RESTART IDENTITY CASCADE;
 
 -- Inserindo dados na tabela cozinha
-INSERT INTO cozinha (id, nome) VALUES (1, 'Tailandesa'), (2, 'Indiana'), (3, 'Argentina'), (4, 'Brasileira');
-select max(id) FROM cozinha;
-select setval('cozinha_id_seq', (select max(id) from cozinha));
+INSERT INTO cozinha (id, nome) VALUES
+    (1, 'Tailandesa'),
+    (2, 'Indiana'),
+    (3, 'Argentina'),
+    (4, 'Brasileira');
+
+SELECT MAX(id) FROM cozinha;
+SELECT SETVAL('cozinha_id_seq', (SELECT MAX(id) FROM cozinha));
+
 -- Inserindo dados na tabela estado
-INSERT INTO estado (id, nome) VALUES (1, 'Minas Gerais'), (2, 'São Paulo'), (3, 'Ceará');
+INSERT INTO estado (id, nome) VALUES
+    (1, 'Minas Gerais'),
+    (2, 'São Paulo'),
+    (3, 'Ceará');
 
 -- Inserindo dados na tabela cidade
 INSERT INTO cidade (id, nome, estado_id) VALUES
@@ -22,19 +31,21 @@ INSERT INTO cidade (id, nome, estado_id) VALUES
 INSERT INTO restaurante (id, nome, taxa_frete, cozinha_id, data_cadastro, data_atualizacao,
                          endereco_cidade_id, endereco_cep, endereco_logradouro, endereco_numero, endereco_bairro)
 VALUES
-    (1, 'Thai Gourmet', 10, 1, now(), now(), 1, '38400-999', 'Rua João Pinheiro', '1000', 'Centro'),
-    (2, 'Thai Delivery', 9.50, 1, now(), now(), NULL, NULL, NULL, NULL, NULL),
-    (3, 'Tuk Tuk Comida Indiana', 15, 2, now(), now(), NULL, NULL, NULL, NULL, NULL),
-    (4, 'Java Steakhouse', 12, 3, now(), now(), NULL, NULL, NULL, NULL, NULL),
-    (5, 'Lanchonete do Tio Sam', 11, 4, now(), now(), NULL, NULL, NULL, NULL, NULL),
-    (6, 'Bar da Maria', 6, 4, now(), now(), NULL, NULL, NULL, NULL, NULL);
+    (1, 'Thai Gourmet', 10, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, '38400-999', 'Rua João Pinheiro', '1000', 'Centro'),
+    (2, 'Thai Delivery', 9.50, 1, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL, NULL, NULL, NULL),
+    (3, 'Tuk Tuk Comida Indiana', 15, 2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL, NULL, NULL, NULL),
+    (4, 'Java Steakhouse', 12, 3, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL, NULL, NULL, NULL),
+    (5, 'Lanchonete do Tio Sam', 11, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL, NULL, NULL, NULL),
+    (6, 'Bar da Maria', 6, 4, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, NULL, NULL, NULL, NULL, NULL);
 
-select max(id) FROM restaurante;
-select setval('restaurante_id_seq', (select max(id) from restaurante));
-
+SELECT MAX(id) FROM restaurante;
+SELECT SETVAL('restaurante_id_seq', (SELECT MAX(id) FROM restaurante));
 
 -- Inserindo dados na tabela forma_pagamento
-INSERT INTO forma_pagamento (id, descricao) VALUES (1, 'Cartão de crédito'), (2, 'Cartão de débito'), (3, 'Dinheiro');
+INSERT INTO forma_pagamento (id, descricao) VALUES
+    (1, 'Cartão de crédito'),
+    (2, 'Cartão de débito'),
+    (3, 'Dinheiro');
 
 -- Inserindo dados na tabela permissao
 INSERT INTO permissao (id, nome, descricao) VALUES

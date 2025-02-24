@@ -4,6 +4,7 @@ import com.algaworks.algafood.core.validation.ValidacaoException;
 import com.algaworks.algafood.domain.Restaurante;
 import com.algaworks.algafood.exception.CozinhaNaoEncontradoException;
 import com.algaworks.algafood.exception.NegocioException;
+import com.algaworks.algafood.model.RestauranteDTO;
 import com.algaworks.algafood.repository.RestauranteRepository;
 import com.algaworks.algafood.service.CadastroRestauranteService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -44,8 +45,11 @@ public class RestauranteController {
     }
 
     @GetMapping("/{restauranteId}")
-    public Restaurante buscar(@PathVariable Long restauranteId) {
-        return cadastroRestaurante.buscarOuFalhar(restauranteId);
+    public RestauranteDTO buscar(@PathVariable Long restauranteId) {
+        Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
+
+    RestauranteDTO restauranteModel = null;
+    return restauranteModel;
     }
 
 //	@PostMapping

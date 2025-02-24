@@ -4,6 +4,7 @@ import com.algaworks.algafood.core.validation.Groups;
 import com.algaworks.algafood.core.validation.Multiplo;
 import com.algaworks.algafood.core.validation.ValorZeroIncluiDescricao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -47,6 +48,7 @@ public class Restaurante {
     @NotNull
     @Valid
     @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
+    @JsonIgnoreProperties(value = "nome" , allowGetters = true)
     private Cozinha cozinha;
 
     @Embedded

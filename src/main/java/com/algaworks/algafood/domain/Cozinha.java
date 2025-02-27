@@ -17,14 +17,13 @@ import java.util.List;
 // @JsonRootName("cozinha") Essa annotation você muda o nome do objeto (Visivel somente na visão XML)
 public class Cozinha {
 
-    @NotNull(groups = Groups.CozinhaId.class)
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     @NotBlank
+    @Column(nullable = false)
     private String nome;
 
     @OneToMany(mappedBy = "cozinha")

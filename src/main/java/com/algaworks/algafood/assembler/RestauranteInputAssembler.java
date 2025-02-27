@@ -1,7 +1,6 @@
 package com.algaworks.algafood.assembler;
 
 import com.algaworks.algafood.domain.Restaurante;
-import com.algaworks.algafood.dto.CozinhaDTO;
 import com.algaworks.algafood.dto.RestauranteDTO;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -12,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Component
 @AllArgsConstructor
-public class RestauranteModelAssembler {
+public class RestauranteInputAssembler {
 
     private final ModelMapper modelMapper;
 

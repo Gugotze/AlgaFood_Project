@@ -1,7 +1,7 @@
 package com.algaworks.algafood.controller;
 
-import com.algaworks.algafood.assembler.RestauranteModelAssembler;
-import com.algaworks.algafood.assembler.RestauranteModelDisassembler;
+import com.algaworks.algafood.assembler.RestauranteInputAssembler;
+import com.algaworks.algafood.assembler.RestauranteInputDisassembler;
 import com.algaworks.algafood.core.validation.ValidacaoException;
 import com.algaworks.algafood.domain.Restaurante;
 import com.algaworks.algafood.dto.RestauranteDTO;
@@ -16,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
@@ -40,15 +39,15 @@ public class RestauranteController {
 
     private final SmartValidator validator;
 
-    private final RestauranteModelAssembler restauranteModelAssembler;
+    private final RestauranteInputAssembler restauranteInputAssembler;
 
-    private final RestauranteModelDisassembler restauranteModelDisassembler;
+    private final RestauranteInputDisassembler restauranteModelDisassembler;
 
 
     @GetMapping
     public List<RestauranteDTO> listar() {
 
-        return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
+        return restauranteInputAssembler.toCollectionModel(restauranteRepository.findAll());
 
     }
 
@@ -56,7 +55,7 @@ public class RestauranteController {
     public RestauranteDTO buscar(@PathVariable Long restauranteId) {
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
 
-        return restauranteModelAssembler.toModel(restaurante);
+        return restauranteInputAssembler.toModel(restaurante);
     }
 
 
@@ -65,7 +64,7 @@ public class RestauranteController {
     public RestauranteDTO adicionar(@RequestBody @Valid RestauranteInput restauranteInput) {
         try {
             Restaurante restaurante = restauranteModelDisassembler.toDomainObject(restauranteInput);
-            return restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restaurante));
+            return restauranteInputAssembler.toModel(cadastroRestaurante.salvar(restaurante));
         } catch (CozinhaNaoEncontradoException e) {
             throw new NegocioException(e.getMessage());
         }
@@ -82,7 +81,7 @@ public class RestauranteController {
       //      BeanUtils.copyProperties(restaurante, restauranteAtual,
       //              "id", "formasPagamento", "endereco", "dataCadastro", "produtos");
 
-            return restauranteModelAssembler.toModel(cadastroRestaurante.salvar(restauranteAtual));
+            return restauranteInputAssembler.toModel(cadastroRestaurante.salvar(restauranteAtual));
         } catch (CozinhaNaoEncontradoException e) {
             throw new NegocioException(e.getMessage());
         }

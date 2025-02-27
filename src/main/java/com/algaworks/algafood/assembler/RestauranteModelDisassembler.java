@@ -1,5 +1,6 @@
 package com.algaworks.algafood.assembler;
 
+import com.algaworks.algafood.domain.Cozinha;
 import com.algaworks.algafood.domain.Restaurante;
 import com.algaworks.algafood.input.RestauranteInput;
 import lombok.AllArgsConstructor;
@@ -14,5 +15,11 @@ public class RestauranteModelDisassembler {
 
     public Restaurante toDomainObject(RestauranteInput restauranteInput) {
         return modelMapper.map(restauranteInput, Restaurante.class);
+    }
+
+    public void copyToDomainObject(RestauranteInput restauranteInput, Restaurante restaurante) {
+        restaurante.setCozinha(new Cozinha());
+
+        modelMapper.map(restauranteInput, restaurante);
     }
 }
